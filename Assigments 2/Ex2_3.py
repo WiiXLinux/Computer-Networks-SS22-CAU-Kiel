@@ -1,8 +1,9 @@
 import sys
+
 if len(sys.argv) != 4:
     print("Usage: encrypt_file.py <input filename> <output filename> <keyphrase>")
     sys.exit(1)
-    
+
 input_file = sys.argv[1]
 output_file = sys.argv[2]
 keyphrase = sys.argv[3]
@@ -23,7 +24,7 @@ try:
     key_len = len(keyphrase)
 
     for i in range(len(data)):
-        key_byte = keyphrase[i%key_len]
+        key_byte = keyphrase[i % key_len]
         f2.write(bytes([data[i] ^ key_byte]))
-except: 
+except:
     print("Error: Could be a lot of errors... For example the outputfile is not writeable")
