@@ -1,0 +1,53 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[english]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts} 
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand*{\qed}{\null\nobreak\hfill\ensuremath{\square}}
+\newcommand*{\puffer}{\text{ }\text{ }\text{ }\text{ }}
+\newcommand*{\lhop}{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily l'hop.}}}{=}}}
+
+\pagestyle{plain}
+\allowdisplaybreaks
+
+\title{Computer Networks - Assignment 3}
+\author{Jannis Kühl, Henri Heyden\\ \small stu241399, stu240825}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+\section*{Task 1}
+\subsection*{a)}
+I think that the processing delay will be a big impact for any packet, because it just seems way too big for my intention. \\
+If I would like to download something big, and if it would take 0.1 ms to process each bit, and there would not be any other delay between my device and the server, a normal ping request that sends \(8 \cdot 32\)bit would take 0,0256s which is already way bigger than many ping durations I have experienced.
+\subsection*{b)}
+For the entire calculation we'll assume that there are not any other transmissions while our packet is being transmitted and that the router can store infinite bit in the queue\\
+We'll name some values to make the calculation more readable:\\
+\(l_{B->K} := 492 \cdot 10^3m\) \\
+\(l_{AEC-1} := 5536 \cdot 10^3m\) \\
+\(v_p := 2 \cdot 10^8m/s\) \\
+\(R_1 := 640 \cdot 10^9b/s\) \\
+\(R_2 := 10^{13}b/s\) \\
+\(d_p := 0.1 \cdot 10^{-3}s\) \\
+\(L := 64 \cdot 2^{10}\) \\
+With these values we can calculate all delays between being sent from Bude to Shirley:\\
+\(d_{p1} = l_{B->K} / v_p = 2.46 \cdot 10^{-3}s\) \\
+\(d_{t1} = L / R_1 = 1.024 \cdot 10^{-7}s\) \\
+\(d_{pro} = d_p \cdot L = 6.5536s\) \\
+\(d_{p2} = l_{AEC-1} / v_p = 0.02768s\) \\
+\(d_{t2} = L / R_2 = 6.5536 \cdot 10^{-9}s\) \\
+That makes the overall delay: \(d = d_{p1} + d_{t1} + d_{pro} + d_{p2} + d_{t2} = 6.580140109s\).\\
+So ideally it would take \(6.580140109\) seconds to send the \(64 \cdot 2^{10}\)bit big packet.
+\subsection*{c)}
+It is quite obvious, that the processing delay from the router is the biggest factor. There are multiple solutions.\\
+You could make a direct connection between Bude and Shirley which is obviously the comedic choice as it is economically impossible. \\
+The more realistic approach would be to use a faster router, or split the packet into parts which are being processed by different routers. \\
+But all in all, just using a faster router is the proper way to go.
+\end{document}
