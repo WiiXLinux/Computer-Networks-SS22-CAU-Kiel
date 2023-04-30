@@ -1,0 +1,59 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[english]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts} 
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{pgf-umlsd}
+\usepackage{titling}
+
+\newcommand*{\qed}{\null\nobreak\hfill\ensuremath{\square}}
+\newcommand*{\puffer}{\text{ }\text{ }\text{ }\text{ }}
+\newcommand*{\lhop}{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily l'hop.}}}{=}}}
+
+\pagestyle{plain}
+\allowdisplaybreaks
+\setlength{\droptitle}{-10em}
+
+\title{Computer Networks - Assignment 3}
+\author{Jannis Kühl, Henri Heyden\\ \small stu241399, stu240825}
+\date{}
+
+
+\begin{document}
+
+\vspace{-5cm}
+\maketitle
+
+\section*{Task 2}
+\subsection*{a)}
+The following graphic should illustrate the delays for one HTTP v1.0 request. \\
+Here we will name the given delays with \(d_t := 3s\) being the servers output transmission delay and \(d_{RTT} := 2s\) being the RTT-delay. \\
+As you can see I am not good with \LaTeX... \\ \\
+\makebox[380pt]{
+\begin{sequencediagram}
+    \newinst{A}{Client}{}
+    \newinst[2]{B}{Server}{}
+
+    \mess[1]{A}{}{B}
+    \node [anchor = east] (t0) at (mess from) {\(t = 0s\): Initiate TCP connect at p=80};
+    \node [anchor = west] (t0) at (mess to) {Accept connection at port 80.};
+
+    \mess[1]{B}{}{A}
+    \node [anchor = west] (t0) at (mess from) {Notify client.};
+    \node [anchor = east] (t0) at (mess to) {Get notified.};
+
+    \mess[1]{A}{}{B}
+    \node [anchor = east] (t0) at (mess from) {\(t = 2s = d_t\): Send request message.};
+    \node [anchor = west] (t0) at (mess to) {Read request message.};
+
+    \mess[3]{B}{200: OK + file}{A}
+    \node [anchor = west] (t0) at (mess from) {Send response message and close TCP connection.};
+    \node [anchor = east] (t0) at (mess to) {\(t = 7s = 2d_t + d_{RTT}\): File received};
+\end{sequencediagram}
+}
+\subsection*{b)}
+Since the process illustrated in \textbf{a)} will have to be done 100 times, since we're using HTTP v.1.0 and are restricted to only one active TCP connection per client, we can calculate the total time: \(T = 100 \cdot t_1 = 700s\). Since we only want the time between the first request being transmitted and the last file arriving at the client, we'll subtract \(d_{RTT}\) one time and get the asked time which is 698 seconds. \\
+\end{document}
