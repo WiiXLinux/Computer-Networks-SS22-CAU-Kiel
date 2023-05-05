@@ -17,7 +17,7 @@ import sys
 
 def TCP_client(url: str) -> None:
     serverPort = urlparse(url).port
-    serverAddress = str(urlparse(url)[1]).removesuffix(":"+str(serverPort))
+    serverAddress = str(urlparse(url)[1]).removesuffix(":" + str(serverPort))
     if serverPort is None:
         serverPort = 80
 
@@ -30,7 +30,7 @@ def TCP_client(url: str) -> None:
             data = clientSocket.recvfrom(2048)[0]
             if data == b'':
                 break
-            print(data.decode().removesuffix("\r\n"), end='')
+            print(data.decode(), end='')
         except EOFError:
             break
     clientSocket.close()
@@ -39,28 +39,3 @@ def TCP_client(url: str) -> None:
 TCP_client(sys.argv[1])
 
 # END A4.2
-
-
-"""
-HTTP/1.1 200 OK␍␤
-Content-Type: text/plain␍␤
-X-Special-Header: 42␍␤
-X-Another-Header: 43␍␤
-Connection: close␍␤
-␍␤
-GET /ref.php HTTP/1.1␍␤
-Connection: close␍␤
-Host: 127.0.0.1:17745␍␤
-
-vs.
-
-HTTP/1.1 200 OK
-Content-Type: text/plain
-X-Special-Header: 42
-X-Another-Header: 43
-Connection: close
-
-GET /ref.php HTTP/1.1
-Host: 127.0.0.1:17745
-
-"""
