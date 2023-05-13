@@ -1,0 +1,35 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[english]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts} 
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand*{\qed}{\null\nobreak\hfill\ensuremath{\square}}
+\newcommand*{\puffer}{\text{ }\text{ }\text{ }\text{ }}
+\newcommand*{\lhop}{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily l'hop.}}}{=}}}
+
+\pagestyle{plain}
+\allowdisplaybreaks
+
+\title{Computer Networks - Assignment 5}
+\author{Jannis Kühl, Henri Heyden\\ \small stu241399, stu240825}
+\date{}
+
+
+\begin{document}
+\maketitle
+\section*{Task 2}
+\subsection*{a)}
+In UDP we would have to demultiplex manually, but because we know that we're analyzing HTTP requests here, there is some sort of transport-layer-demultiplexing, since http relies on TCP.\\
+With that we know that the part needed to demultiplex incoming request is the 4-tuple of (source IP-Address, source port number, destination IP-Address, destination port number). \\
+This information is stored in the IP part of the packet and the UDP part of the incoming packet. \\
+Since this tuple is individual for every client, the transmission layer can distinguish between request even if destination port, destination address and source port are the same.\\
+(Notice that if a client would make two requests at the same time these two requests would be handled individually, because the source port can't be the same.)
+\subsection*{b)}
+As already mentioned, with transport-layer-demultiplexing the server can distinguish between every request. \\
+In this case as mentioned by the assignment, source port of the request coming from client A and the source port of the "second" request from client C are the same. But notice that the source IP are not the same, and since the transport-layer-demultiplexing works with the 4-tuple we mentioned in a), we can distinguish between both requests. \\
+We can even distinguish between the two requests by client C since the source ports are different.
+\end{document}
