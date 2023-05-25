@@ -1,0 +1,46 @@
+# Ist eigentlich nur dein Code bloß bisschen abgespeckt, alles andere funktionierte nicht richtig
+
+import struct
+from zlib import crc32
+from udt_socket import udt_send, udt_recv, start_sender
+
+
+def is_corrupt(data_message: bytes) -> bool:
+    checksum = int.from_bytes(data_message[0:4], "big")
+    seq_and_data = data_message[4:24]
+    realChecksum = crc32(seq_and_data)
+    return realChecksum != checksum
+
+
+def extract_data(data_message: bytes) -> tuple[int, bytes]:
+    return int.from_bytes(data_message[4:8], "big"), data_message[8:24]
+
+
+NAK = b'\xbe\xbc\xb4\xde'
+ACK = b'ACK!'
+realMessage = None
+
+def rdt_recv():
+    message = b""
+    data = udt_recv()
+
+    while data != b'\x88sP\xce\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'\
+            and data != b'\x88sP\xce\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00':
+        message += data[8:24]
+        udt_send(struct.pack("!I4s", crc32(ACK), ACK))
+        data = udt_recv()
+    udt_send(struct.pack("!I4s", crc32(ACK), ACK))
+
+    # slice the 0's off temp
+    notYet = True
+    slicer = len(message)
+    for i in range(len(message)):
+        if notYet:
+            if message[len(message) - i - 1] == 0:
+                slicer -= 1
+            else:
+                notYet = False
+        else:
+            break
+
+    return message[:slicer]
