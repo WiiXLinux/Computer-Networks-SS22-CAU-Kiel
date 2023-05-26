@@ -1,0 +1,68 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[english]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts} 
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand*{\qed}{\null\nobreak\hfill\ensuremath{\square}}
+\newcommand*{\puffer}{\text{ }\text{ }\text{ }\text{ }}
+
+\pagestyle{plain}
+\allowdisplaybreaks
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                                   
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\title{Computer Networks - Assignment 7}
+\author{Jannis Kühl, Henri Heyden\\ \small stu241399, stu240825}
+\date{}
+
+
+\begin{document}
+\maketitle
+\section*{Task 3}
+\subsection*{a) and b)}
+The full table should look like this:
+\begin{lstlisting}
+No. Time  Source          Destination         Protocol Info
+1 0.0000 	0.0.0.0:68	 	  255.255.255.255:67 	DHCP 	DISCOVER
+2 0.0003 	10.44.12.33:67	255.255.255.255:68 	DHCP 	OFFER	
+3 0.0005 	10.44.0.10:67 	255.255.255.255:68 	DHCP 	OFFER	
+4 0.0701 	0.0.0.0:68	 	  255.255.255.255:67	DHCP 	REQUEST	  
+5 0.0702 	10.44.12.33:67 	255.255.255.255:68 	DHCP 	ACK		 
+\end{lstlisting}
+The two DHCP servers are 10.44.12.33 and 10.44.0.10.
+\subsection*{c)}
+The obvious reason is that the client doesn't have an address yet, so the server messages have to be broadcast. \\
+It could also be useful, because there are two DHCP servers:\\
+When the first server ACK's the request, the other server knows that this address is taken, so it can remove this address from their pool. \\
+This of course only makes sense if the two DHCP servers share some addresses of their pool of possible addresses.
+
+\end{document}
