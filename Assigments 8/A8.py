@@ -1,5 +1,4 @@
 import struct
-import sys
 
 
 def parse_ipv4_datagram(datagram: bytes) -> tuple[bytes, bytes, int, bytes]:
@@ -82,21 +81,20 @@ for i, b in enumerate(result):
     if i % 16 == 15:
         print()
 '''
-# Key = lanPort, Value = wanPort. Ip that goes in has a port that also has to be translated.
-# Key = wanPort, Value = lanPort. Ip that goes out has a port that also has to be translated.
+# (ip_from, sourcePort) <-> (translated_ip_from, translated_sourcePort)
 _CN_portDict = {}
-# Key = wanPort, Value = lanIp
-_CN_ipDict = {}
-_CN_maxPort = 1
+
+_CN_maxPort = 0
 
 
 def translate_addresses(datagram: bytes, interface: str, wan_addr: bytes) -> bytes:
+    datagram = bytes(datagram)
     global _CN_portDict  # We need this to translate the ports
-    global _CN_ipDict
     global _CN_maxPort
     # Copy to 10th byte (last byte of protocol), then add a zero checksum.
     newDatagram = datagram[:10] + bytes.fromhex("0000")  # Now at length 12. 8 bytes to go.
     ip_from, ip_to, protocol, data = parse_ipv4_datagram(datagram)
+
     if interface == "lan":  # So connection is outgoing from local network
         newDatagram += wan_addr  # Doesn't change, there is only one address, which is the "router" address.
         newDatagram += ip_to
@@ -105,15 +103,13 @@ def translate_addresses(datagram: bytes, interface: str, wan_addr: bytes) -> byt
         sourcePort = data[0:2]  # Source port mentioned in payload, has to be translated
 
         try:
-            # print(type(sourcePort), file=sys.stderr)
-            newDatagram = newDatagram + _CN_portDict[sourcePort]  # Add translated source port
+            newDatagram = newDatagram + _CN_portDict[ip_from, sourcePort]  # Add translated source port
         except KeyError:  # If the source port is not registered yet,
-            _CN_portDict[struct.pack("!h", _CN_maxPort)] = sourcePort  # give it a
-            _CN_portDict[sourcePort] = struct.pack("!h", _CN_maxPort)  # translation port
-            _CN_ipDict[struct.pack("!h", _CN_maxPort)] = ip_from  # Add an entry to the port to lan Ip database
+            _CN_portDict[ip_from, sourcePort] = struct.pack("!h", _CN_maxPort)  # give it a
+            _CN_portDict[struct.pack("!h", _CN_maxPort)] = ip_from, sourcePort  # translation port
             _CN_maxPort += 1
 
-            newDatagram += _CN_portDict[sourcePort]  # Then add translated source port
+            newDatagram += _CN_portDict[ip_from, sourcePort]  # Then add translated source port
 
         destinationPort = data[2:4]  # Add destination port mentioned in payload, stays the same
         newDatagram += destinationPort
@@ -122,7 +118,7 @@ def translate_addresses(datagram: bytes, interface: str, wan_addr: bytes) -> byt
 
     elif interface == "wan":  # So connection is incoming to local network
         newDatagram += ip_from
-        newDatagram += _CN_ipDict[data[2:4]]  # Add the translated destination ip address
+        newDatagram += _CN_portDict[data[2:4]][0]  # Add the translated destination ip address
         # Now at length 20
 
         sourcePort = data[0:2]  # Source port mentioned in payload
@@ -131,7 +127,7 @@ def translate_addresses(datagram: bytes, interface: str, wan_addr: bytes) -> byt
         destinationPort = data[2:4]  # Destination port mentioned in payload. Has to be translated
 
         try:
-            newDatagram += _CN_portDict[destinationPort]  # Add translated destination port
+            newDatagram += _CN_portDict[destinationPort][1]  # Add translated destination port
         except KeyError:
             print("There was no value for the destination port: " + str(int.from_bytes(destinationPort, "big")))
 
@@ -142,28 +138,3 @@ def translate_addresses(datagram: bytes, interface: str, wan_addr: bytes) -> byt
     newDatagram += data[4:]  # Add the rest that remains unchanged
 
     return newDatagram
-
-
-'''
-datagram = bytes.fromhex("""
-45 00 00 3c 43 eb 00 00  ff 11 24 20 c0 a8 b2 01
-e0 00 00 fb 14 e9 14 e9  00 28 32 84 8b 3e 01 00
-00 01 00 00 00 00 00 00  08 75 62 75 6e 74 75 2d
-38 05 6c 6f 63 61 6c 00  00 ff 00 01
-""")
-
-print("_CN_maxPort: " + str(_CN_maxPort), "_CN_portDict: " + str(_CN_portDict), "_CN_ipDict: " + str(_CN_ipDict))
-
-result = translate_addresses(datagram, "lan", bytes.fromhex("11 11 11 11"))
-
-print("_CN_maxPort: " + str(_CN_maxPort), "_CN_portDict: " + str(_CN_portDict), "_CN_ipDict: " + str(_CN_ipDict))
-
-for i, b in enumerate(result):
-    if i % 16 == 0:
-        print(f'{i:05x}   ', end='')
-    if i % 8 == 0:
-        print(' ', end='')
-    print(f'{b:02x} ', end='')
-    if i % 16 == 15:
-        print()
-'''
