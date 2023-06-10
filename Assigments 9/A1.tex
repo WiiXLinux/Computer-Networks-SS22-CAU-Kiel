@@ -29,7 +29,7 @@
 We marked the predecessors for the shortest paths in the following image:
 \includegraphics[width=\textwidth]{A1.png}
 Because the table states that the shortest path from u to w is a direct connection, we can set a to 3, because a is the wheight of the connection between u to w. \\
-Since we also know that the shortest path to v has its predecessor as w, and we know the shortest path to w, which is u->w with wheight 9, we know b must be bigger or equal to 9. \pagebreak
+Since we also know that the shortest path to v has its predecessor as w, and we know the shortest path to w, which is u \(\rightarrow\) w with wheight 9, we know b must be bigger or equal to 9. \pagebreak
 \subsection*{b)}
 \textbf{1:} Distance vectors before x is added \\ \\
     \begin{tabular}{||c c c c||} 
@@ -62,7 +62,7 @@ Since we also know that the shortest path to v has its predecessor as w, and we 
      \hline
      Destination & dv(x) \\ [0.5ex] 
      \hline\hline
-     u & 4 \\ 
+     u & \textbf{4} \\ 
      \hline
      v & 2 \\
      \hline
@@ -78,12 +78,12 @@ Since we also know that the shortest path to v has its predecessor as w, and we 
      \hline\hline
      u & 2 & 5 \\ 
      \hline
-     v & 0 & 3 \\
+     v & 0 & \textbf{3} \\
      \hline
-     w & 3 & 0 \\
+     w & \textbf{3} & 0 \\
      \hline
-     x & 2 & 1 \\
+     x & \textbf{2} & \textbf{1} \\
      \hline
     \end{tabular} \\ \\ \\
-
+(v \(\rightarrow\) x and w \(\rightarrow\) x changed from \(+\infty\) to their values now, so they have to be marked)
 \end{document}
