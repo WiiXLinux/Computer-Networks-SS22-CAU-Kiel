@@ -72,7 +72,7 @@ def crc(data: bytes, generator: int, generator_length: int) -> int:
     print(i_arr_padded_input)
 
     # get first mask
-    mask = int_to_IO_array(generator)[:generator_length]
+    mask = int_to_IO_array(generator)[:generator_length]  # sonst ist das zu groß komischerweise.
     # and first slice
     slice1 = i_arr_padded_input[:generator_length]
     print(len(slice1))
@@ -83,7 +83,7 @@ def crc(data: bytes, generator: int, generator_length: int) -> int:
     somebits = []
     while True:
         res = IO_array_XOR(slice1, mask)
-        #rint("   " * (i) + str(slice1))
+        print("   " * (i) + str(slice1))
         print("   " * (i) + str(mask))
         try:
             slice1 = res[1:] + [i_arr_padded_input[i + generator_length]]
