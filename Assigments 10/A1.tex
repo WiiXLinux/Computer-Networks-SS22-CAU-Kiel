@@ -1,0 +1,61 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[english]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts} 
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+
+\graphicspath{./}
+
+\newcommand*{\qed}{\null\nobreak\hfill\ensuremath{\square}}
+\newcommand*{\puffer}{\text{ }\text{ }\text{ }\text{ }}
+\newcommand*{\lhop}{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily l'hop.}}}{=}}}
+
+\pagestyle{plain}
+\allowdisplaybreaks
+
+\title{Computer Networks - Assignment 10}
+\author{Jannis Kühl, Henri Heyden\\ \small stu241399, stu240825}
+\date{}
+
+
+\begin{document}
+\maketitle
+\section*{Task 1}
+\textbf{1:} Source MAC addresses\\ \\
+    \begin{tabular}{||c c c c||} 
+     \hline
+     Point\ \ \ \ \vline & 3 & 4 & 5 \\ [0.5ex] 
+     \hline
+     Address \vline & 68-01-BC-58-AF-24 & 72-9E-4A-31-9C-42 & 72-9E-4A-31-9C-42 \\ 
+     \hline\hline
+    \end{tabular} \\ \\ \\
+\textbf{2:} Destination MAC addresses\\ \\
+    \begin{tabular}{||c c c c||} 
+     \hline
+     Point\ \ \ \ \vline & 3 & 4 & 5 \\ [0.5ex] 
+     \hline
+     Address \vline & 49-FA-B0-3C-E2-7C & D5-A0-EE-9A-73-D5 & D5-A0-EE-9A-73-D5 \\ 
+     \hline\hline
+    \end{tabular} \\ \\ \\
+\textbf{3:} Source IP addresses\\ \\
+    \begin{tabular}{||c c c c||} 
+     \hline
+     Point\ \ \ \ \vline & 3 & 4 & 5 \\ [0.5ex] 
+     \hline
+     Address \vline & 128.119.50.107 & 128.119.50.107 & 128.119.50.107 \\ 
+     \hline\hline
+    \end{tabular} \\ \\
+The Source IP addresses in 4 and 5 depend on the fact if the router forwards the datagram or not, which would depend on if the net going in the link at 3 would be treated as a subnet of the router while the net going into the link at 4 as WAN. This would actually be the case in my home since I use one of the interfaces of my router as a connection to my Deutsche Glasfaser modem. Since in the image there is another cable connected to the router I conclude that this is not the case and nothing is being forwarded at this level. \\ \\
+\textbf{4:} Destination IP addresses\\ \\
+    \begin{tabular}{||c c c c||} 
+     \hline
+     Point\ \ \ \ \vline & 3 & 4 & 5 \\ [0.5ex] 
+     \hline
+     Address \vline & 128.119.240.116 & 128.119.240.116 & 128.119.240.116 \\ 
+     \hline\hline
+    \end{tabular} \\ \\ \\
+\end{document}
